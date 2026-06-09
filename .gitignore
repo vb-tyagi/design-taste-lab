@@ -58,3 +58,15 @@ landing page - image grid/
 
 # Internal planning docs
 design-taste-extractor-idea.md
+
+# ─── audit 2026-06-09: secret/credential safety net ───
+.env
+.env.*
+!.env.example
+.envrc
+*.pem
+*.key
+*.p12
+*.jks
+.gcp/
+.aws/

@@ -98,7 +98,6 @@ export function planRound1(sessionId: string): RoundPlan {
   const refQuality = assessReferenceQuality(sessionId);
   const tasteMap = session.tasteMap as TasteMap | null;
   const uncertainAxes = getUncertainAxes(tasteMap);
-  const _onboarding = session.onboardingData as Record<string, unknown> | null;
 
   const methods: ExtractionMethod[] = [];
   const methodConfigs: RoundPlan['methodConfigs'] = {};

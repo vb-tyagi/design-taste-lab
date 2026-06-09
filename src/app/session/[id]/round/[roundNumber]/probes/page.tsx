@@ -191,7 +191,6 @@ export default function ProbesPage() {
           {probes.map((probe, idx) => {
             const r = ratings[probe.id];
             const engaged = isProbeEngaged(probe.id);
-            const ratingOpt = RATING_OPTIONS.find((o) => o.id === r?.rating);
 
             return (
               <div

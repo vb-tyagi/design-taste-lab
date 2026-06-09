@@ -107,7 +107,6 @@ async function main() {
   if (fs.existsSync(MANIFEST_PATH)) {
     manifest = JSON.parse(fs.readFileSync(MANIFEST_PATH, 'utf-8'));
   }
-  const existingUrls = new Set(manifest.map((m) => m.url));
 
   // Launch browser
   const browser = await puppeteer.launch({

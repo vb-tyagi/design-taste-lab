@@ -1,64 +1,7 @@
 import puppeteer from 'puppeteer';
 import path from 'path';
 import fs from 'fs';
-import { validateSessionId } from '@/lib/security';
-
-/**
- * Validate a URL before navigating with Puppeteer.
- * Blocks file://, javascript:, and private/internal IP ranges (SSRF prevention).
- */
-function validateUrl(url: string): void {
-  const lower = url.trim().toLowerCase();
-
-  // Block dangerous schemes
-  if (lower.startsWith('file://')) {
-    throw new Error('file:// URLs are not allowed');
-  }
-  if (lower.startsWith('javascript:')) {
-    throw new Error('javascript: URLs are not allowed');
-  }
-
-  let parsed: URL;
-  try {
-    parsed = new URL(url);
-  } catch {
-    throw new Error('Invalid URL');
-  }
-
-  const hostname = parsed.hostname.toLowerCase();
-
-  // Block localhost and loopback
-  if (hostname === 'localhost' || hostname === '127.0.0.1' || hostname === '::1') {
-    throw new Error('Localhost URLs are not allowed');
-  }
-
-  // Block AWS metadata endpoint
-  if (hostname === '169.254.169.254') {
-    throw new Error('Metadata endpoint URLs are not allowed');
-  }
-
-  // Block private IP ranges
-  const ipMatch = hostname.match(/^(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})$/);
-  if (ipMatch) {
-    const [, a, b] = ipMatch.map(Number);
-    // 10.0.0.0/8
-    if (a === 10) {
-      throw new Error('Private IP URLs are not allowed');
-    }
-    // 172.16.0.0/12
-    if (a === 172 && b >= 16 && b <= 31) {
-      throw new Error('Private IP URLs are not allowed');
-    }
-    // 192.168.0.0/16
-    if (a === 192 && b === 168) {
-      throw new Error('Private IP URLs are not allowed');
-    }
-    // 169.254.0.0/16 (link-local)
-    if (a === 169 && b === 254) {
-      throw new Error('Link-local IP URLs are not allowed');
-    }
-  }
-}
+import { validateSessionId, assertSafeUrl } from '@/lib/security';
 
 export interface ScreenshotResult {
   filePath: string;
@@ -183,7 +126,7 @@ export async function captureScreenshot(
   url: string,
   sessionId: string
 ): Promise<ScreenshotResult> {
-  validateUrl(url);
+  await assertSafeUrl(url);
   if (!validateSessionId(sessionId)) throw new Error('Invalid session ID');
 
   const uploadDir = path.join(process.cwd(), 'public', 'uploads', sessionId);
@@ -238,7 +181,7 @@ export async function captureViewportScreenshot(
   sessionId: string,
   viewport: { width: number; height: number } = { width: 1440, height: 900 }
 ): Promise<ScreenshotResult> {
-  validateUrl(url);
+  await assertSafeUrl(url);
   if (!validateSessionId(sessionId)) throw new Error('Invalid session ID');
 
   const uploadDir = path.join(process.cwd(), 'public', 'uploads', sessionId);

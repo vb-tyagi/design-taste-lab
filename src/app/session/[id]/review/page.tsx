@@ -170,7 +170,7 @@ export default function ReviewPage() {
 
         {/* Clusters */}
         <div className="space-y-8">
-          {clusters.map((cluster, clusterIdx) => {
+          {clusters.map((cluster) => {
             const clusterRefs = getClusterRefs(cluster);
             return (
               <div

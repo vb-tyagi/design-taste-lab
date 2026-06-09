@@ -85,7 +85,7 @@ try {
     stdio: 'pipe',
   });
   success('Database schema applied');
-} catch (err) {
+} catch {
   warn('Database setup failed — you can run it manually with: npm run db:push');
 }
 

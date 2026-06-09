@@ -90,8 +90,6 @@ async function scrapeMinimalGallery(limit: number): Promise<MinimalGalleryItem[]
       // Extract image URLs and site names from the HTML
       // Pattern: <img src="...wp-content/uploads/YEAR/MONTH/domain_-900x500.png" alt="site name">
       const imgRegex = /src="(https?:\/\/minimal\.gallery\/wp-content\/uploads\/\d{4}\/\d{2}\/[^"]+)"/g;
-      const altRegex = /alt="([^"]+)"/g;
-      const linkRegex = /href="(https?:\/\/minimal\.gallery\/[^"]+\/)"/g;
 
       let match;
       while ((match = imgRegex.exec(html)) !== null) {

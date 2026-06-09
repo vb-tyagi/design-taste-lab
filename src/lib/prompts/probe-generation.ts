@@ -44,7 +44,6 @@ export function buildHtmlProbeUserPrompt(
   const useCase = (ob.useCase || '').toLowerCase();
   const isMobileApp = useCase.includes('mobile') || useCase.includes('app');
   const isDashboard = useCase.includes('dashboard') || useCase.includes('saas');
-  const _isLanding = useCase.includes('landing') || useCase.includes('marketing') || useCase.includes('website');
   const roundInstructions: Record<number, string> = {
     1: isMobileApp
       ? `## ROUND 1 — Explore 4 very different MOBILE APP directions
